@@ -1,0 +1,13 @@
+Upggift 6
+
+Deluppgift a
+%let kommer att kallas en gång eftersom att det har utvecklats före
+evalueringen.
+
+Deluppgift b
+Det kommer att fungera eftersom att %gensym kommer ha bytts ut mot en symbol
+före evalueringen.
+
+Deluppgift c
+Ja om makrot kommer att expanderas till en %lambda som sedan kan skickas in som
+argument i en högre ordningens funktion.

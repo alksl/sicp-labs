@@ -1,0 +1,30 @@
+(%define (%cons (first %lazy) (second %lazy))
+  (%lambda (selector) (selector first second)))
+
+(%define (%car pair)
+  (pair (%lambda ((first %lazy) (second %lazy)) first)))
+
+(%define (%cdr pair)
+  (pair (%lambda ((first %lazy) (second %lazy)) second)))
+
+(%define %ones (%cons 1 %ones))
+(%define (%integers-from n) (%cons n (%integers-from (%+ n 1)))) 
+(%define %integers (%integers-from 1))
+
+(%define (f1 a b) (%if (%= a 0) 1 b))
+(%define (f2 a (b %lazy)) (%if (%= a 0) 1 b))
+(%define (f3 a (b %lazy-memo)) (%if (%= a 0) 1 b))
+
+;(remote-eval '(f1 1 (%/ 1 0)))
+;/: division by zero
+
+;(remote-eval '(f2 1 (%/ 1 0)))
+; $thunk ...
+
+;(remote-eval '(f3 1 (%/ 1 0)))
+; $memo-thunk ...
+
+(%define %cons-stream %cons)
+(%define %stream-car %car)
+(%define %stream-cdr %cdr)
+(%define %stream-null? %null?)

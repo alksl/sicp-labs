@@ -1,0 +1,3 @@
+Uppgift 1
+Argumenten för primitiva procedurer är inte fördröjda. Det innebär attt det
+inte går att basera strömmar par skapad av %cons som är en primitiv.

@@ -1,0 +1,13 @@
+Uppgift 5
+
+Deluppgift a
+%let uttrycket kommer att expanderas varje gång funktionen appliceras och det
+kommer ske 300 gånger.
+
+Deluppgift b
+%define är en special form som inte tar hänsyn till makron, det görs endast när
+en procedur appliceras. För att exemplet ska fungera behöver expanderingen ske
+även när %define evalueras.
+
+Deluppgift c
+Ja, det går lika bra att aplicera ett makro med rätt argument som en procedur.

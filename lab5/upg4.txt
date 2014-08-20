@@ -1,0 +1,12 @@
+---- Inkorrekt ----
+Diskuterat vid labb.
+
+
+Upggift 4:
+%quote kan defineras som en funktion eftersom att den kan ses som att
+uttrycket fördröjs. De resterande (förutom %cond och %begin) måste vara kvar
+för att de är centrala hur evaluatorn fungerar. Eftersom att det måste gå att
+definer bindningar i miljön och det är svårt att skriva %if som en funktion
+utan en underliggande %if.
+
+(%define (%quote (expr %lazy)) expr)

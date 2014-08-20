@@ -1,0 +1,94 @@
+(%defmacro %setq!
+  (%lambda (var value)
+           (%list (%quote %set!)
+                  var
+                  (%list (%quote %quote) value))))
+
+(%define (%map fn list)
+  (%if (%null? list)
+       (%quote ())
+       (%cons (fn (%car list))
+                  (%map fn (%cdr list)))))
+
+(%define (%foldr fn init-val list)
+   (%if (%null? list)
+        init-val
+        (fn (%car list) (%foldr fn init-val (%cdr list)))))
+
+(%define (%first list)
+  (%car list))
+
+(%define (%second list)
+  (%car (%cdr list)))
+
+(%defmacro %let
+  (%lambda args
+           (%cons
+            (%cons (%quote %lambda)
+                   (%cons
+                    (%map %first (%car args))
+                    (%cdr args)))
+                   (%map %second (%car args)))))
+
+(%defmacro %let*
+  (%lambda (definitions body)
+    (%foldr (%lambda (binding body)
+                     (%list (%quote %let)
+                            (%list binding)
+                            body))
+            body
+            definitions)))
+
+(%defmacro %dolist
+  (%lambda args
+    (%list (%quote %let) (%list (%list (%quote lst) (%car (%cdr (%car args)))))
+           (%list (%quote %define) (%quote (dolist-iteration lst))
+                  (%list (%quote %if) (%quote (%null? lst))
+                         (%car (%cdr (%cdr (%car args))))
+                         (%cons (%quote %begin)
+                                (%list
+                                 (%cons (%cons (%quote %lambda)
+                                               (%cons (%list (%car (%car args)))
+                                                      (%cdr args)))
+                                        (%quote ((%first lst))))
+                                 (%quote (dolist-iteration (%cdr lst)))))))
+           (%quote (dolist-iteration lst)))))
+
+(%define (%sumlist lst)
+  (%define sum 0)
+  (%dolist (x lst sum) (%set! sum (%+ sum x))))
+
+(%defmacro %delay
+   (%lambda expr
+     (%cons (%quote %lambda)
+            (%cons (%list)
+                   expr))))
+
+(%define (%force delayed)
+  (delayed))
+
+
+(%defmacro %cons-stream
+  (%lambda args
+     (%list (%quote %cons)
+            (%car args)
+            (%cons (%quote %delay) (%cdr args)))))
+
+(%define (%stream-car stream)
+  (%car stream))
+
+(%define (%stream-null? stream)
+  (%null? stream))
+
+(%define (%stream-cdr stream)
+  (%force (%cdr stream)))
+
+(%define %the-empty-stream (%quote ()))
+
+;(%begin
+; (%display "The 20 first prime numbers:")
+; (%newline)
+; (%print-stream primes 20)
+; (%quote ok))
+
+
